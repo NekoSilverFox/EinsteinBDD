@@ -1,0 +1,2 @@
+C:\Users\mi\Desktop\Programma\EinsteinBDD\example\Debug\example.exe
+C:\Users\mi\Desktop\Programma\EinsteinBDD\example\Debug\example.pdb

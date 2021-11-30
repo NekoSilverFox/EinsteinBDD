@@ -1,0 +1,3 @@
+﻿  example.cpp
+C:\Users\mi\Desktop\Programma\EinsteinBDD\example\example.cpp(7,9): warning C4081: 应输入“标识符”；找到“(”
+  example.vcxproj -> C:\Users\mi\Desktop\Programma\EinsteinBDD\example\Debug\example.exe
