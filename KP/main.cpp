@@ -15,6 +15,7 @@
 #define SqrtN		3
 #define M				4				// число свойств
 #define LOG_N		4
+#define ADD_CONDITIONS		1
 
 // **********************************************************************
 
@@ -117,20 +118,18 @@ void main()
 	bdd t_bdd = bddtrue;
 
 
-
-
-
-
 	// ОГРАНИЧЕНИЯ
 	//  >>>>>>>>>>>>>>>>>> Ограничения I типа. В задании: 6, дополнительные: ? <<<<<<<<<<<<<<<<<<<<
+
+#if 1
 	// 1.	`F` живет в  доме 1
 	t_bdd &= p_name[1][NAME_F];
 
 	// 2.	Кто пользуется телефона Samsung, живет в доме 5
 	t_bdd &= p_phone[5][PHONE_SAMSUNG];
 
-	// 3.	`E` живет в доме 4
-	t_bdd &= p_name[4][NAME_E];
+	// 3.	`E` живет в доме 3
+	t_bdd &= p_name[3][NAME_E];
 
 	// 4.	Кто любит есть говядину, живет в доме 0
 	t_bdd &= p_food[0][FOOD_BEEF];
@@ -142,7 +141,23 @@ void main()
 	t_bdd &= p_food[6][FOOD_WATERML];
 
 	//----- дополнительные условия -------
+#if ADD_CONDITIONS
+	t_bdd &= p_name[2][NAME_A];
+	t_bdd &= p_name[4][NAME_D];
+	t_bdd &= p_name[6][NAME_H];
+	t_bdd &= p_name[8][NAME_I];
+	t_bdd &= p_tel_num[0][TEL_NUM_3];
+	t_bdd &= p_tel_num[2][TEL_NUM_2];
+	t_bdd &= p_tel_num[3][TEL_NUM_0];
+	t_bdd &= p_tel_num[7][TEL_NUM_8];
+	t_bdd &= p_phone[2][PHONE_VIVO];
+	t_bdd &= p_phone[4][PHONE_APPLE];
+	t_bdd &= p_food[1][FOOD_PUMPKIN];
+	t_bdd &= p_food[2][FOOD_CUKE];
+	t_bdd &= p_food[5][FOOD_CABBAGE];
+	t_bdd &= p_food[8][FOOD_PIG];
 
+#endif
 
 	cout << " > Constraints type 1 have been applied.\n"
 		<< "Number of nodes : " << bdd_nodecount(t_bdd) << "\n"
@@ -155,6 +170,8 @@ void main()
 
 
 	//  >>>>>>>> Ограничения II типа. В задании: 3, дополнительные: ? <<<<<<<
+
+#if 1
 	for (unsigned t = 0; t < N; t++)
 	{
 		//	1.	Обладатели телефонов Google любят есть курицу
@@ -166,18 +183,31 @@ void main()
 		//	3.	Обладатели телефонов Huawei, последняя цифра номера телефона равна 1
 		t_bdd &= NOT(	p_phone[t][PHONE_HUAWEI]	XOR		p_tel_num[t][TEL_NUM_1]		);
 
+		// 【补充】用苹果的人喜欢吃香蕉
+		t_bdd &= NOT(	p_phone[t][PHONE_APPLE]	XOR		p_food[t][FOOD_BANANA]		);
+
+		// 【补充】用小米的人喜欢吃喜欢吃牛肉
+		t_bdd &= NOT(p_phone[t][PHONE_XIAOMI]	XOR		p_food[t][FOOD_BEEF]);
+
+		// 【补充】尾号是6的人喜欢吃猪肉
+		t_bdd &= NOT(p_tel_num[t][TEL_NUM_6]	XOR		p_food[t][FOOD_PIG]);
+
+		// 【补充】尾号是4的人用三星手机
+		t_bdd &= NOT(p_tel_num[t][TEL_NUM_4]	XOR		p_phone[t][PHONE_SAMSUNG]);
+
+		// 【补充】尾号是0的人用realme手机
+		t_bdd &= NOT(p_tel_num[t][TEL_NUM_0]	XOR		p_phone[t][PHONE_REALME]);
+
+		// 【补充】用 OPPO 手机的人喜欢吃西瓜
+		t_bdd &= NOT(p_phone[t][PHONE_OPPO]	XOR		p_food[t][FOOD_WATERML]);
+
+		// 【补充】尾号是6的人用HTC手机
+		t_bdd &= NOT(p_tel_num[t][TEL_NUM_6]	XOR		p_phone[t][PHONE_HTC]);
+
 		//----- дополнительные условия -------
-		//task &= !(p_name[t][6] ^ p_tel_num[t][3]); //22.	Мышь зовут Марк. (n2)
-		//task &= !(p_name[t][3] ^ p_tel_num[t][5]); //23.	Ёжа зовут Фёдор. (n2)
-		//task &= !(p_name[t][4] ^ p_food[t][2]); //24.	Лев пьёт кока-кола. (n2)
-		//task &= !(p_name[t][2] ^ p_phone[t][6]); //25.	Олень играет на арфе. (n2)
-		//task &= !(p_tel_num[t][8] ^ p_food[t][3]); //26.	Полина пьёт воду. (n2)
-		//task &= !(p_name[t][1] ^ p_tel_num[t][7]); //27.	Волка зовут Вера. (n2)
-		//task &= !(p_name[t][3] ^ p_phone[t][4]); //28.	Ёж играет на саксофоне. (n2)
-		//task &= !(p_food[t][2] ^ p_phone[t][5]); //29.	Животное, которое пьёт кока-кола, играет на баяне. (n2)
-		//task &= !(p_name[t][7] ^ p_food[t][8]); //30.	Кот пьёт молоко. (n2)
-		//task &= !(p_name[t][1] ^ p_food[t][6]); //31.	Волк пьёт водку. (n2)
+
 	}
+#endif
 	cout << " > Constraints type 2 have been applied.\n"
 		<< "Number of nodes : " << bdd_nodecount(t_bdd) << "\n"
 		<< "Number of solution(s): " << std::fixed << std::setprecision(0) << (double)bdd_satcount(t_bdd) << "\n\n";
@@ -189,128 +219,293 @@ void main()
 
 
 
-
 	//  >>>>>>>>>>>>>>>>>>>>>> Ограничения III типа. В задании: 5. <<<<<<<<<<<<<<<<<<<<<<<<
+
+#if 1
 	// 1.	Человек, живущие под `C`, любят картофель
 	t_bdd		&=		NOT p_name[		grid[2][0]		][NAME_C];
 	t_bdd		&=		NOT p_name[		grid[2][2]		][NAME_C];
 	t_bdd		&=		NOT p_food[			grid[0][0]		][FOOD_PHOTO];
 	t_bdd		&=		NOT p_food[			grid[0][2]		][FOOD_PHOTO];
 
-#if 0
-	for (unsigned iv = 0; iv < SqrtN; iv++)
+	bdd tmp_bdd1 = bddtrue;
+	for (unsigned i = 0; i < SqrtN - 1; i++)
 	{
-			t_bdd &=		NOT p_name[		grid[iv][0]					][NAME_C]
-							& NOT p_food[			grid[iv][SqrtN - 1]		][FOOD_PHOTO];
-	}
-
-	for (unsigned ig = 0; ig < SqrtN; ig++)
-	{
-		t_bdd &=			NOT p_name[		grid[0][ig]				][NAME_C]
-							& NOT p_food[		grid[SqrtN - 1][ig]		][FOOD_PHOTO];
-	}
-
-	for (unsigned iv = 1; iv < SqrtN; iv++)
-	{
-		for (unsigned ig = 1; ig < SqrtN; ig++)
+		for (unsigned j = 0; j < SqrtN; j++)
 		{
-			t_bdd &=		NOT (			p_name[		grid[iv][ig]				][NAME_C]
-											XOR p_food[		grid[iv - 1][ig - 1]		][FOOD_PHOTO]
-										);
+			tmp_bdd1 |= (				p_name[		grid[i][j]				][NAME_C]
+									AND		p_food[			grid[i + 1][j]		][FOOD_PHOTO]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i + 1 << ", " << j << ">  " << endl;
 		}
 	}
+	// 胶合
+	tmp_bdd1		|=		(p_name[		grid[2][1]		][NAME_C]		AND		p_food[		grid[0][1]		][FOOD_PHOTO]);
+	t_bdd			&=	tmp_bdd1;
 
 
 	// 2.	Человек, живущий под человеком, который пользуется телефоном Apple, имеет последняя цифра номера телефона равна 8
-	for (unsigned iv = 0; iv < SqrtN; iv++)
-	{
-			t_bdd &=		NOT p_phone[		grid[iv][0]					][PHONE_APPLE]
-							& NOT p_tel_num[		grid[iv][SqrtN - 1]	][TEL_NUM_8];
-	}
+	t_bdd		&=		NOT p_phone[		grid[2][0]		][PHONE_APPLE];
+	t_bdd		&=		NOT p_phone[		grid[2][2]		][PHONE_APPLE];
+	t_bdd		&=		NOT p_tel_num[	grid[0][0]		][TEL_NUM_8];
+	t_bdd		&=		NOT p_tel_num[	grid[0][2]		][TEL_NUM_8];
 
-	for (unsigned ig = 0; ig < SqrtN; ig++)
+	bdd tmp_bdd2 = bddtrue;
+	for (unsigned i = 0; i < SqrtN - 1; i++)
 	{
-		t_bdd &=			NOT p_phone[		grid[0][ig]					][PHONE_APPLE]
-							& NOT p_tel_num[		grid[SqrtN - 1][ig]	][TEL_NUM_8];
-	}
-
-	for (unsigned iv = 1; iv < SqrtN; iv++)
-	{
-		for (unsigned ig = 1; ig < SqrtN; ig++)
+		for (unsigned j = 0; j < SqrtN; j++)
 		{
-			t_bdd &=		NOT (			p_phone[		grid[iv][ig]						][PHONE_APPLE]
-											XOR p_tel_num[		grid[iv - 1][ig - 1]		][TEL_NUM_8]
-										);
+			tmp_bdd2 |= (			p_phone[		grid[i][j]				][PHONE_APPLE]
+									AND p_tel_num[	grid[i + 1][j]		][TEL_NUM_8]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i + 1 << ", " << j << ">  " << endl;
 		}
 	}
+	// 胶合
+	tmp_bdd2		|=		(p_phone[		grid[2][1]		][PHONE_APPLE]		AND		p_tel_num[		grid[0][1]		][TEL_NUM_8]);
+	t_bdd			&=	tmp_bdd2;
 
-	//	3.	`C` живет ниже `E`
-		for (unsigned iv = 0; iv < SqrtN; iv++)
-	{
-			t_bdd &=		NOT p_name[		grid[iv][0]					][NAME_C]
-							& NOT p_name[		grid[iv][SqrtN - 1]		][NAME_E];
-	}
 
-	for (unsigned ig = 0; ig < SqrtN; ig++)
-	{
-		t_bdd &=			NOT p_name[		grid[0][ig]					][NAME_C]
-							& NOT p_name[		grid[SqrtN - 1][ig]		][NAME_E];
-	}
+	// 7.【补充】	`E` живет под `C`
+	t_bdd		&=		NOT p_name[		grid[2][0]		][NAME_C];
+	t_bdd		&=		NOT p_name[		grid[2][2]		][NAME_C];
+	t_bdd		&=		NOT p_name[		grid[0][0]		][NAME_E];
+	t_bdd		&=		NOT p_name[		grid[0][2]		][NAME_E];
 
-	for (unsigned iv = 1; iv < SqrtN; iv++)
+	bdd tmp_bdd7 = bddtrue;
+	for (unsigned i = 0; i < SqrtN - 1; i++)
 	{
-		for (unsigned ig = 1; ig < SqrtN; ig++)
+		for (unsigned j = 0; j < SqrtN; j++)
 		{
-			t_bdd &=		NOT(			p_name[		grid[iv][ig]					][NAME_C]
-										XOR p_name[		grid[iv - 1][ig - 1]		][NAME_E]);
+			tmp_bdd7 |= (			p_name[		grid[i][j]			][NAME_C]
+									AND p_name[		grid[i + 1][j]	][NAME_E]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i + 1 << ", " << j << ">  " << endl;
 		}
 	}
+	// 向下胶合
+	tmp_bdd7		|=		(p_name[		grid[2][1]		][NAME_C]		AND		p_name[		grid[0][1]		][NAME_E]);
+	t_bdd			&=	tmp_bdd7;
+
+	// 6.	【胶合-补充】用谷歌手机的人，下面的喜欢吃南瓜
+	t_bdd		&=		NOT p_phone[		grid[2][0]		][PHONE_GOOGLE];
+	t_bdd		&=		NOT p_phone[		grid[2][2]		][PHONE_GOOGLE];
+	t_bdd		&=		NOT p_food[			grid[0][0]		][FOOD_PUMPKIN];
+	t_bdd		&=		NOT p_food[			grid[0][2]		][FOOD_PUMPKIN];
+
+	bdd tmp_bdd6 = bddtrue;
+	for (unsigned i = 0; i < SqrtN - 1; i++)
+	{
+		for (unsigned j = 0; j < SqrtN; j++)
+		{
+			tmp_bdd6 |= (			p_phone[		grid[i][j]				][PHONE_GOOGLE]
+									AND p_food[			grid[i + 1][j]		][FOOD_PUMPKIN]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i + 1 << ", " << j << ">  " << endl;
+		}
+	}
+	// 向下胶合
+	tmp_bdd6		|=		(p_phone[		grid[2][1]		][PHONE_GOOGLE]		AND		p_food[		grid[0][1]		][FOOD_PUMPKIN]);
+	t_bdd			&=	tmp_bdd6;
+
+
+	// 3.	喜欢吃土豆的人，下面的用OPPO手机
+	t_bdd		&=		NOT p_food[		grid[2][0]		][FOOD_PHOTO];
+	t_bdd		&=		NOT p_food[		grid[2][2]		][FOOD_PHOTO];
+	t_bdd		&=		NOT p_phone[			grid[0][0]		][PHONE_OPPO];
+	t_bdd		&=		NOT p_phone[			grid[0][2]		][PHONE_OPPO];
+
+	bdd tmp_bdd3 = bddtrue;
+	for (unsigned i = 0; i < SqrtN - 1; i++)
+	{
+		for (unsigned j = 0; j < SqrtN; j++)
+		{
+			tmp_bdd3 |= (			p_food[		grid[i][j]				][FOOD_PHOTO]
+									AND p_phone[			grid[i + 1][j]		][PHONE_OPPO]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i + 1 << ", " << j << ">  " << endl;
+		}
+	}
+	// 向下胶合
+	tmp_bdd3		|=		(p_food[		grid[2][1]		][FOOD_PHOTO]		AND		p_phone[		grid[0][1]		][PHONE_OPPO]);
+	t_bdd			&=	tmp_bdd3;
 
 	//	4.	Человек, который живет под `B`, пользуется телефоном HTC
-	for (unsigned iv = 0; iv < SqrtN; iv++)
-	{
-			t_bdd &=		NOT p_name[		grid[iv][0]					][NAME_B]
-							& NOT p_name[		grid[iv][SqrtN - 1]		][PHONE_HTC];
-	}
+	t_bdd		&=		NOT p_name[		grid[2][0]		][NAME_B];
+	t_bdd		&=		NOT p_name[		grid[2][2]		][NAME_B];
+	t_bdd		&=		NOT p_phone[		grid[0][0]		][PHONE_HTC];
+	t_bdd		&=		NOT p_phone[		grid[0][2]		][PHONE_HTC];
 
-	for (unsigned ig = 0; ig < SqrtN; ig++)
+	bdd tmp_bdd4 = bddtrue;
+	for (unsigned i = 0; i < SqrtN - 1; i++)
 	{
-		t_bdd &=			NOT p_name[		grid[0][ig]				][NAME_B]
-							& NOT p_phone[		grid[SqrtN - 1][ig]	][PHONE_HTC];
-	}
-
-	for (unsigned iv = 1; iv < SqrtN; iv++)
-	{
-		for (unsigned ig = 1; ig < SqrtN; ig++)
+		for (unsigned j = 0; j < SqrtN; j++)
 		{
-			t_bdd &= NOT(		p_name[		grid[iv][ig]					][NAME_B]
-								XOR p_phone[		grid[iv - 1][ig - 1]		][PHONE_HTC]
-								);
+			tmp_bdd4 |= (			p_name[		grid[i][j]			][NAME_B]
+									AND p_phone[		grid[i + 1][j]	][PHONE_HTC]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i + 1 << ", " << j << ">  " << endl;
 		}
 	}
+	// 向下胶合
+	tmp_bdd4		|=		(p_name[		grid[2][1]		][NAME_B]		AND		p_phone[		grid[0][1]		][PHONE_HTC]);
+	t_bdd			&=	tmp_bdd4;
+
 
 	//	5.	Человек, который живет под телефоном Vivo, любит есть капусту
-	for (unsigned iv = 0; iv < SqrtN; iv++)
-	{
-			t_bdd &=		NOT p_phone[		grid[iv][0]					][PHONE_VIVO]
-							& NOT p_food[			grid[iv][SqrtN - 1]			][FOOD_CABBAGE];
-	}
+	t_bdd		&=		NOT p_phone[		grid[2][0]		][PHONE_VIVO];
+	t_bdd		&=		NOT p_phone[		grid[2][2]		][PHONE_VIVO];
+	t_bdd		&=		NOT p_food[			grid[0][0]		][FOOD_CABBAGE];
+	t_bdd		&=		NOT p_food[			grid[0][2]		][FOOD_CABBAGE];
 
-	for (unsigned ig = 0; ig < SqrtN; ig++)
+	bdd tmp_bdd5 = bddtrue;
+	for (unsigned i = 0; i < SqrtN - 1; i++)
 	{
-		t_bdd &=			NOT p_phone[		grid[0][ig]				][PHONE_VIVO]
-							& NOT p_food[			grid[SqrtN - 1][ig]		][FOOD_CABBAGE];
-	}
-
-	for (unsigned iv = 1; iv < SqrtN; iv++)
-	{
-		for (unsigned ig = 1; ig < SqrtN; ig++)
+		for (unsigned j = 0; j < SqrtN; j++)
 		{
-			t_bdd &=		NOT(			p_phone[		grid[iv][ig]				][PHONE_VIVO]
-										XOR p_food[			grid[iv - 1][ig - 1]		][FOOD_CABBAGE]);
+			tmp_bdd5 |= (			p_phone[		grid[i][j]			][PHONE_VIVO]
+									AND p_food[			grid[i + 1][j]	][FOOD_CABBAGE]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i + 1 << ", " << j << ">  " << endl;
 		}
 	}
+	// 向下胶合
+	tmp_bdd5		|=		(p_phone[		grid[2][1]		][PHONE_VIVO]		AND		p_food[		grid[0][1]		][FOOD_CABBAGE]);
+	t_bdd			&=	tmp_bdd5;
+
+
+
+	// 【补充】H的右上角住着D?
+	t_bdd		&=		NOT p_name[		grid[0][0]		][NAME_H];
+	t_bdd		&=		NOT p_name[		grid[0][2]		][NAME_H];
+	t_bdd		&=		NOT p_name[		grid[1][2]		][NAME_H];
+	t_bdd		&=		NOT p_name[		grid[2][2]		][NAME_H];
+	t_bdd		&=		NOT p_name[		grid[0][0]		][NAME_D];
+	t_bdd		&=		NOT p_name[		grid[1][0]		][NAME_D];
+	t_bdd		&=		NOT p_name[		grid[2][0]		][NAME_D];
+	t_bdd		&=		NOT p_name[		grid[2][1]		][NAME_D];
+
+
+	// 【向右上指的情况】未考虑胶合的情况
+	bdd tmp_bdd_3_6 = bddtrue;
+	for (unsigned i = 1; i < SqrtN; i++)
+	{
+		for (unsigned j = 0; j < SqrtN -1; j++)
+		{
+			tmp_bdd_3_6 |= (			p_name[		grid[i][j]					][NAME_H]
+										AND p_name[		grid[i - 1][j + 1]		][NAME_D]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i - 1 << ", " << j + 1<< ">  " << endl;
+		}
+	}
+	// 向右上胶合
+	tmp_bdd_3_6 |=		(p_name[		grid[0][1]		][NAME_H]		AND		p_name[		grid[2][2]		][NAME_D]);
+	t_bdd		&= tmp_bdd_3_6;
+
+
+	// 【补充】E的右上角住着F?
+	t_bdd		&=		NOT p_name[		grid[0][0]		][NAME_E];
+	t_bdd		&=		NOT p_name[		grid[0][2]		][NAME_E];
+	t_bdd		&=		NOT p_name[		grid[1][2]		][NAME_E];
+	t_bdd		&=		NOT p_name[		grid[2][2]		][NAME_E];
+	t_bdd		&=		NOT p_name[		grid[0][0]		][NAME_F];
+	t_bdd		&=		NOT p_name[		grid[1][0]		][NAME_F];
+	t_bdd		&=		NOT p_name[		grid[2][0]		][NAME_F];
+	t_bdd		&=		NOT p_name[		grid[2][1]		][NAME_F];
+
+
+	// 【向右上指的情况】未考虑胶合的情况
+	bdd tmp_bdd_3_7 = bddtrue;
+	for (unsigned i = 1; i < SqrtN; i++)
+	{
+		for (unsigned j = 0; j < SqrtN -1; j++)
+		{
+			tmp_bdd_3_7 |= (			p_name[		grid[i][j]					][NAME_E]
+										AND p_name[		grid[i - 1][j + 1]		][NAME_F]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i - 1 << ", " << j + 1<< ">  " << endl;
+		}
+	}
+	// 向右上胶合
+	tmp_bdd_3_7 |=		(p_name[		grid[0][1]		][NAME_E]		AND		p_name[		grid[2][2]		][NAME_F]);
+	t_bdd		&= tmp_bdd_3_7;
+
+
+
+		// 【补充】喜欢吃香蕉的右上角住着尾号是2的?
+	t_bdd		&=		NOT p_food[				grid[0][0]		][FOOD_BANANA];
+	t_bdd		&=		NOT p_food[				grid[0][2]		][FOOD_BANANA];
+	t_bdd		&=		NOT p_food[				grid[1][2]		][FOOD_BANANA];
+	t_bdd		&=		NOT p_food[				grid[2][2]		][FOOD_BANANA];
+	t_bdd		&=		NOT p_tel_num[		grid[0][0]		][TEL_NUM_2];
+	t_bdd		&=		NOT p_tel_num[		grid[1][0]		][TEL_NUM_2];
+	t_bdd		&=		NOT p_tel_num[		grid[2][0]		][TEL_NUM_2];
+	t_bdd		&=		NOT p_tel_num[		grid[2][1]		][TEL_NUM_2];
+
+
+	// 【向右上指的情况】未考虑胶合的情况
+	bdd tmp_bdd_3_8 = bddtrue;
+	for (unsigned i = 1; i < SqrtN; i++)
+	{
+		for (unsigned j = 0; j < SqrtN -1; j++)
+		{
+			tmp_bdd_3_8 |= (			p_food[				grid[i][j]					][FOOD_BANANA]
+										AND p_tel_num[		grid[i - 1][j + 1]		][TEL_NUM_2]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i - 1 << ", " << j + 1<< ">  " << endl;
+		}
+	}
+	// 向右上胶合
+	tmp_bdd_3_8 |=		(p_food[		grid[0][1]		][FOOD_BANANA]		AND		p_tel_num[		grid[2][2]		][TEL_NUM_2]);
+	t_bdd		&= tmp_bdd_3_8;
+
+
+
+		// 【补充】D的右上角住着A?
+	t_bdd		&=		NOT p_name[		grid[0][0]		][NAME_D];
+	t_bdd		&=		NOT p_name[		grid[0][2]		][NAME_D];
+	t_bdd		&=		NOT p_name[		grid[1][2]		][NAME_D];
+	t_bdd		&=		NOT p_name[		grid[2][2]		][NAME_D];
+	t_bdd		&=		NOT p_name[		grid[0][0]		][NAME_A];
+	t_bdd		&=		NOT p_name[		grid[1][0]		][NAME_A];
+	t_bdd		&=		NOT p_name[		grid[2][0]		][NAME_A];
+	t_bdd		&=		NOT p_name[		grid[2][1]		][NAME_A];
+
+
+	// 【向右上指的情况】未考虑胶合的情况
+	bdd tmp_bdd_3_9 = bddtrue;
+	for (unsigned i = 1; i < SqrtN; i++)
+	{
+		for (unsigned j = 0; j < SqrtN -1; j++)
+		{
+			tmp_bdd_3_9 |= (			p_name[		grid[i][j]					][NAME_D]
+										AND p_name[		grid[i - 1][j + 1]		][NAME_A]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i - 1 << ", " << j + 1<< ">  " << endl;
+		}
+	}
+	// 向右上胶合
+	tmp_bdd_3_9 |=		(p_name[		grid[0][1]		][NAME_D]		AND		p_name[		grid[2][2]		][NAME_A]);
+	t_bdd		&= tmp_bdd_3_9;
+
+
+
+		// 【补充】G的右上角住着B?
+	t_bdd		&=		NOT p_name[		grid[0][0]		][NAME_G];
+	t_bdd		&=		NOT p_name[		grid[0][2]		][NAME_G];
+	t_bdd		&=		NOT p_name[		grid[1][2]		][NAME_G];
+	t_bdd		&=		NOT p_name[		grid[2][2]		][NAME_G];
+	t_bdd		&=		NOT p_name[		grid[0][0]		][NAME_B];
+	t_bdd		&=		NOT p_name[		grid[1][0]		][NAME_B];
+	t_bdd		&=		NOT p_name[		grid[2][0]		][NAME_B];
+	t_bdd		&=		NOT p_name[		grid[2][1]		][NAME_B];
+
+
+	// 【向右上指的情况】未考虑胶合的情况
+	bdd tmp_bdd_3_10 = bddtrue;
+	for (unsigned i = 1; i < SqrtN; i++)
+	{
+		for (unsigned j = 0; j < SqrtN -1; j++)
+		{
+			tmp_bdd_3_10 |= (			p_name[		grid[i][j]					][NAME_G]
+										AND p_name[		grid[i - 1][j + 1]		][NAME_B]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i - 1 << ", " << j + 1<< ">  " << endl;
+		}
+	}
+	// 向右上胶合
+	tmp_bdd_3_10 |=		(p_name[		grid[0][1]		][NAME_G]		AND		p_name[		grid[2][2]		][NAME_B]);
+	t_bdd		&= tmp_bdd_3_10;
 #endif
+
 	cout << " > Constraints type 3 have been applied.\n"
 		<< "Number of nodes : " << bdd_nodecount(t_bdd) << "\n"
 		<< "Number of solution(s): " << std::fixed << std::setprecision(0) << (double)bdd_satcount(t_bdd) << "\n\n";
@@ -322,96 +517,164 @@ void main()
 
 
 
-
-#if 0
-
 	//  >>>>>>>>>>>>>>>>>>>>>> Ограничения IV типа. В задании: 4. <<<<<<<<<<<<<<<<<<<<<<<<
-	// 1.	`F`, указывающий на `I`
+
+#if 1
+	// 1.	`F`, указывающий на `I`【胶合】
 	// F 不能在哪
 	t_bdd &= !p_name[		grid[2][2]		][NAME_F];
 	// I 不能在哪
 	t_bdd &= !p_name[		grid[0][0]		][NAME_I];
+	t_bdd &= !p_name[		grid[1][0]		][NAME_I];
 
 	// 【向下指的情况】未考虑胶合的情况 4.1.1
+	bdd tmp_bdd_4_1_1 = bddtrue;
+	bdd tmp_bdd_4_1_2 = bddtrue;
 	for (unsigned i = 0; i < SqrtN - 1; i++)
 	{
 		for (unsigned j = 0; j < SqrtN; j++)
 		{
-			t_bdd |= (				p_name[		grid[i][j]				][NAME_F]
-								AND p_name[		grid[i + 1][j]		][NAME_I]);
+			tmp_bdd_4_1_1		 |= (				p_name[		grid[i][j]				][NAME_F]
+													AND p_name[		grid[i + 1][j]		][NAME_I]);
 			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i + 1 << ", " << j << ">  " << endl;
 		}
 	}
+
 	// 【向右上指的情况】未考虑胶合的情况 4.1.2
 	for (unsigned i = 1; i < SqrtN; i++)
 	{
 		for (unsigned j = 0; j < SqrtN -1; j++)
 		{
-			t_bdd |= !(				p_name[		grid[i][j]				][NAME_F]
-								XOR p_name[		grid[i - 1][j + 1]		][NAME_I]);
-			cout << "F: <" << i << ", " << j << ">  " << "I: <" << i + 1 << ", " << j << ">  " << endl;
+			tmp_bdd_4_1_2		|= (				p_name[		grid[i][j]					][NAME_F]
+													AND p_name[		grid[i - 1][j + 1]		][NAME_I]);
+			cout << "F: <" << i << ", " << j << ">  " << "I: <" << i - 1 << ", " << j + 1<< ">  " << endl;
+		}
+	}
+	// 向下胶合
+	tmp_bdd_4_1_1		|=		(p_name[		grid[2][1]		][NAME_F]		AND		p_name[		grid[0][1]		][NAME_I]);
+	// 向右上胶合
+	tmp_bdd_4_1_2		|=		(p_name[		grid[0][1]		][NAME_F]		AND		p_name[		grid[2][2]		][NAME_I]);
+	t_bdd		&=		tmp_bdd_4_1_1;
+	t_bdd		&=		tmp_bdd_4_1_2;
+
+
+	// 2.	`A`, указывающий на `B`
+	// A 不能在哪
+	t_bdd &= !p_name[		grid[2][2]		][NAME_A];
+	// B 不能在哪
+	t_bdd &= !p_name[		grid[0][0]		][NAME_B];
+	t_bdd &= !p_name[		grid[1][0]		][NAME_B];
+
+	// 【向下指的情况】未考虑胶合的情况 4.2.1
+	bdd tmp_bdd_4_2_1 = bddtrue;
+	bdd tmp_bdd_4_2_2 = bddtrue;
+	for (unsigned i = 0; i < SqrtN - 1; i++)
+	{
+		for (unsigned j = 0; j < SqrtN; j++)
+		{
+			tmp_bdd_4_2_1		 |= (				p_name[		grid[i][j]				][NAME_A]
+													AND p_name[		grid[i + 1][j]		][NAME_B]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i + 1 << ", " << j << ">  " << endl;
 		}
 	}
 
-	// 2.	`A`, указывающий на `B`
+	// 【向右上指的情况】未考虑胶合的情况 4.2.2
+	for (unsigned i = 1; i < SqrtN; i++)
+	{
+		for (unsigned j = 0; j < SqrtN -1; j++)
+		{
+			tmp_bdd_4_2_2		|= (				p_name[		grid[i][j]					][NAME_A]
+													AND p_name[		grid[i - 1][j + 1]		][NAME_B]);
+			cout << "F: <" << i << ", " << j << ">  " << "I: <" << i - 1 << ", " << j + 1<< ">  " << endl;
+		}
+	}
+	// 向下胶合
+	tmp_bdd_4_2_1		|=		(p_name[		grid[2][1]		][NAME_A]		AND		p_name[		grid[0][1]		][NAME_B]);
+	// 向右上胶合
+	tmp_bdd_4_2_2		|=		(p_name[		grid[0][1]		][NAME_A]		AND		p_name[		grid[2][2]		][NAME_B]);
+	t_bdd		&=		tmp_bdd_4_2_1;
+	t_bdd		&=		tmp_bdd_4_2_2;
 
 
 	// 3.	`D`, указывающий на `G`
+	// D 不能在哪
+	t_bdd &= !p_name[		grid[2][2]		][NAME_D];
+	// G 不能在哪
+	t_bdd &= !p_name[		grid[0][0]		][NAME_G];
+	t_bdd &= !p_name[		grid[1][0]		][NAME_G];
+
+	// 【向下指的情况】未考虑胶合的情况 4.3.1
+	bdd tmp_bdd_4_3_1 = bddtrue;
+	bdd tmp_bdd_4_3_2 = bddtrue;
+	for (unsigned i = 0; i < SqrtN - 1; i++)
+	{
+		for (unsigned j = 0; j < SqrtN; j++)
+		{
+			tmp_bdd_4_3_1		 |= (				p_name[		grid[i][j]				][NAME_D]
+													AND p_name[		grid[i + 1][j]		][NAME_G]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i + 1 << ", " << j << ">  " << endl;
+		}
+	}
+
+	// 【向右上指的情况】未考虑胶合的情况 4.3.2
+	for (unsigned i = 1; i < SqrtN; i++)
+	{
+		for (unsigned j = 0; j < SqrtN -1; j++)
+		{
+			tmp_bdd_4_3_2		|= (				p_name[		grid[i][j]					][NAME_D]
+													AND p_name[		grid[i - 1][j + 1]		][NAME_G]);
+			cout << "F: <" << i << ", " << j << ">  " << "I: <" << i - 1 << ", " << j + 1<< ">  " << endl;
+		}
+	}
+	// 向下胶合
+	tmp_bdd_4_3_1		|=		(p_name[		grid[2][1]		][NAME_D]		AND		p_name[		grid[0][1]		][NAME_G]);
+	// 向右上胶合
+	tmp_bdd_4_3_2		|=		(p_name[		grid[0][1]		][NAME_D]		AND		p_name[		grid[2][2]		][NAME_G]);
+	t_bdd		&=		tmp_bdd_4_3_1;
+	t_bdd		&=		tmp_bdd_4_3_2;
+
+
+
 	// 4.	`E`, указывающий на `H`
+	// E 不能在哪
+	t_bdd &= !p_name[		grid[2][2]		][NAME_E];
+	// H 不能在哪
+	t_bdd &= !p_name[		grid[0][0]		][NAME_H];
+	t_bdd &= !p_name[		grid[1][0]		][NAME_H];
 
-
-	// 16.	Лев ссылается на слон.
-	tmp_bdd_1 = bddtrue;
-	tmp_bdd_2 = bddtrue;
-
-	for (unsigned iv = 0; iv < SqrtN; iv++) tmp_bdd_1 &= !p_name[	grid[iv][0]	][4] & !p_name[		grid[iv][SqrtN - 1]	][5];
-	for (unsigned ig = 0; ig < SqrtN; ig++) tmp_bdd_1 &= !p_name[	grid[0][ig]	][4] & !p_name[		grid[SqrtN - 1][ig]	][5];
-	for (unsigned iv = 1; iv < SqrtN; iv++) {
-		for (unsigned ig = 1; ig < SqrtN; ig++) tmp_bdd_1 &= !(p_name[grid[iv][ig]][4] ^ p_name[grid[iv - 1][ig - 1]][5]); //
+	// 【向下指的情况】未考虑胶合的情况 4.4.1
+	bdd tmp_bdd_4_4_1 = bddtrue;
+	bdd tmp_bdd_4_4_2 = bddtrue;
+	for (unsigned i = 0; i < SqrtN - 1; i++)
+	{
+		for (unsigned j = 0; j < SqrtN; j++)
+		{
+			tmp_bdd_4_4_1		 |= (				p_name[		grid[i][j]				][NAME_E]
+													AND p_name[		grid[i + 1][j]		][NAME_H]);
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i + 1 << ", " << j << ">  " << endl;
+		}
 	}
 
-	for (unsigned iv = 0; iv < SqrtN; iv++) tmp_bdd_2 &= !p_name[grid[iv][0]][4] & !p_name[grid[iv][SqrtN - 1]][5];
-	for (unsigned iv = 0; iv < SqrtN; iv++) { /*0 1 2*/
-		for (unsigned ig = 1; ig < SqrtN; ig++) /* 1 2 */
-			tmp_bdd_2 &= !(p_name[grid[iv][ig]][4] ^ p_name[grid[iv][ig-1]][5]);
+	// 【向右上指的情况】未考虑胶合的情况 4.4.2
+	for (unsigned i = 1; i < SqrtN; i++)
+	{
+		for (unsigned j = 0; j < SqrtN -1; j++)
+		{
+			tmp_bdd_4_4_2		|= (				p_name[		grid[i][j]					][NAME_E]
+													AND p_name[		grid[i - 1][j + 1]		][NAME_H]);
+			cout << "F: <" << i << ", " << j << ">  " << "I: <" << i - 1 << ", " << j + 1<< ">  " << endl;
+		}
 	}
-	t_bdd &= tmp_bdd_1 | tmp_bdd_2;
+	// 向下胶合
+	tmp_bdd_4_4_1		|=		(p_name[		grid[2][1]		][NAME_E]		AND		p_name[		grid[0][1]		][NAME_H]);
+	// 向右上胶合
+	tmp_bdd_4_4_2		|=		(p_name[		grid[0][1]		][NAME_E]		AND		p_name[		grid[2][2]		][NAME_H]);
+	t_bdd		&=		tmp_bdd_4_4_1;
+	t_bdd		&=		tmp_bdd_4_4_2;
 
-	// 17.	Волк ссылается на олень.
-	tmp_bdd_1 = bddtrue;
-	tmp_bdd_2 = bddtrue;
 
-	for (unsigned iv = 0; iv < SqrtN; iv++) tmp_bdd_1 &= !p_food[grid[iv][0]][6] & !p_tel_num[grid[iv][SqrtN - 1]][0];
-	for (unsigned ig = 0; ig < SqrtN; ig++) tmp_bdd_1 &= !p_food[grid[0][ig]][6] & !p_tel_num[grid[SqrtN - 1][ig]][0];
-	for (unsigned iv = 1; iv < SqrtN; iv++) {
-		for (unsigned ig = 1; ig < SqrtN; ig++)
-			tmp_bdd_1 &= !(p_food[grid[iv][ig]][6] ^ p_tel_num[grid[iv - 1][ig - 1]][0]);
-	}
-
-	for (unsigned iv = 0; iv < SqrtN; iv++) tmp_bdd_2 &= !p_food[grid[iv][0]][6] & !p_tel_num[grid[iv][SqrtN - 1]][0];
-	for (unsigned iv = 0; iv < SqrtN; iv++) { /*0 1 2*/
-		for (unsigned ig = 1; ig < SqrtN; ig++) /* 1 2 */
-			tmp_bdd_2 &= !(p_food[grid[iv][ig]][6] ^ p_tel_num[grid[iv][ig - 1]][0]);
-	}
-	t_bdd &= tmp_bdd_1 | tmp_bdd_2;
-
-	// 18. Вера ссылается на Кирилла.
-	tmp_bdd_1 = bddtrue;
-	tmp_bdd_2 = bddtrue;
-
-	for (unsigned iv = 0; iv < SqrtN; iv++) tmp_bdd_1 &= !p_tel_num[grid[iv][0]][4] & !p_tel_num[grid[iv][SqrtN - 1]][1];
-	for (unsigned ig = 0; ig < SqrtN; ig++) tmp_bdd_1 &= !p_tel_num[grid[0][ig]][4] & !p_tel_num[grid[SqrtN - 1][ig]][1];
-	for (unsigned iv = 1; iv < SqrtN; iv++) {
-		for (unsigned ig = 1; ig < SqrtN; ig++) tmp_bdd_1 &= !(p_tel_num[grid[iv][ig]][4] ^ p_tel_num[grid[iv - 1][ig - 1]][1]);
-	}
-
-	for (unsigned iv = 0; iv < SqrtN; iv++) tmp_bdd_2 &= !p_tel_num[grid[iv][0]][4] & !p_tel_num[grid[iv][SqrtN - 1]][1];
-	for (unsigned iv = 0; iv < SqrtN; iv++) { /*0 1 2*/
-		for (unsigned ig = 1; ig < SqrtN; ig++) /* 1 2 */
-			tmp_bdd_2 &= !(p_tel_num[grid[iv][ig]][4] ^ p_tel_num[grid[iv][ig - 1]][1]);
-	}
-	t_bdd &= tmp_bdd_1 | tmp_bdd_2;
 #endif
+
 
 	cout << " > Constraints type 4 have been applied.\n"
 		<< "Number of nodes : " << bdd_nodecount(t_bdd) << "\n"
@@ -419,10 +682,24 @@ void main()
 
 
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-
+#if 1
 	// >>>>>>>>>>>>>>>>>>>>>> Ограничение VI типа.
 	for (unsigned i = 0; i < N; i++)
 	{
@@ -475,6 +752,7 @@ void main()
 	//------------------------------
 
 	bdd_done(); // завершение работы библиотеки
+#endif
 }
 
 // Ниже реализация функций, управляющих выводом результатов.
