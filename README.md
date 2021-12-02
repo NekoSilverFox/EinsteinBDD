@@ -1,5 +1,17 @@
-# EinsteinBDD
-使用二元决策图（BDD）及程序解决爱因斯坦谜题
+<p align="center">
+ <img width="100px" src="https://github.com/NekoSilverFox/NekoSilverfox/blob/master/icons/silverfox.svg" align="center" alt="NekoSilverfox" />
+ <h1 align="center">EinsteinBDD</h2>
+ <p align="center"><b>使用二元决策图（BDD）解决二维的爱因斯坦难题</b></p>
+</p>
+
+<div align=center>
+
+[![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen)](LICENSE)
+
+
+<!-- 顶部至此截止 -->
+<div align=left>
+
 
 ## 说明
 
@@ -99,7 +111,7 @@
 
 
 
-# **Использование бинарных решающих диаграмм для решения логических задач**
+### **Использование бинарных решающих диаграмм для решения логических задач**
 
 ## Ведение
 
