@@ -275,11 +275,11 @@
 
 Беляев А. Б., Шошмина И. В. Использование бинарных решающих диаграмм для решения логических задач. Библиотека Buddy – СПб: Санкт-Петербургский государственный политехнический университет – 26 с.
 
-\2.  Документация по использованию библиотеки BuDDy // BuDDy: A BDD package – 2007. – URL: http://buddy.sourceforge.net/manual/ (дата обращения: 14.12.2018).
+Документация по использованию библиотеки BuDDy // BuDDy: A BDD package – 2007. – URL: http://buddy.sourceforge.net/manual/ (дата обращения: 14.12.2018).
 
-\3. Рассел С. Искусственный интеллект: современный подход. 2е изд.: Пер. с англ. / С. Рассел, П. Норвиг М.: Вильямс, 2006. 1408 с.
+Рассел С. Искусственный интеллект: современный подход. 2е изд.: Пер. с англ. / С. Рассел, П. Норвиг М.: Вильямс, 2006. 1408 с.
 
 Krzysztof R. Apt. Principles of Constraint Programming – Cambridge: Cambridge University Press, 2003. – 407 с.
 
-\5. Henrik Reif Andersen. An Introduction to Binary Decision Diagrams // Lecture notes for 49285 Advanced Algorithms E97. – [Denmark, 1997] – URL: http://www.cs.utexas.edu/~isil/cs389L/bdd.pdf (дата обращения: 14.12.2018).
+Henrik Reif Andersen. An Introduction to Binary Decision Diagrams // Lecture notes for 49285 Advanced Algorithms E97. – [Denmark, 1997] – URL: http://www.cs.utexas.edu/~isil/cs389L/bdd.pdf (дата обращения: 14.12.2018).
 
