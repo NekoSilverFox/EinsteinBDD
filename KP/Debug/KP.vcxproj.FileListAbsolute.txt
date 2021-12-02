@@ -1,2 +1,0 @@
-C:\Users\mi\Desktop\Programma\EinsteinBDD\KP\Debug\KP.exe
-C:\Users\mi\Desktop\Programma\EinsteinBDD\KP\Debug\KP.pdb

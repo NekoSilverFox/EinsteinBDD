@@ -6,6 +6,8 @@
 
 <div align=center>
 
+
+![BDD-lib](https://img.shields.io/badge/lib-BuDDy-orange)
 [![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen)](LICENSE)
 
 
@@ -277,7 +279,7 @@
 
 \3. Рассел С. Искусственный интеллект: современный подход. 2е изд.: Пер. с англ. / С. Рассел, П. Норвиг М.: Вильямс, 2006. 1408 с.
 
-\4. Krzysztof R. Apt. Principles of Constraint Programming – Cambridge: Cambridge University Press, 2003. – 407 с.
+Krzysztof R. Apt. Principles of Constraint Programming – Cambridge: Cambridge University Press, 2003. – 407 с.
 
 \5. Henrik Reif Andersen. An Introduction to Binary Decision Diagrams // Lecture notes for 49285 Advanced Algorithms E97. – [Denmark, 1997] – URL: http://www.cs.utexas.edu/~isil/cs389L/bdd.pdf (дата обращения: 14.12.2018).
 
