@@ -15,7 +15,7 @@
 #define SqrtN								3
 #define M									4				// §é§Ú§ã§Ý§à §ã§Ó§à§Û§ã§ä§Ó
 #define LOG_N							4
-#define ADD_CONDITIONS		0
+#define ADD_CONDITIONS		1				// §Õ§à§á§à§Ý§ß§Ú§ä§Ö§Ý§î§ß§í§Ö §å§ã§Ý§à§Ó§Ú§ñ
 
 // **********************************************************************
 
@@ -173,6 +173,7 @@ void main()
 		<< "Number of solution(s): " << std::fixed << std::setprecision(0) << (double)bdd_satcount(t_bdd) << "\n\n";
 
 
+
 	/////////////////////////////////////////////////////////// §°§Ô§â§Ñ§ß§Ú§é§Ö§ß§Ú§ñ II §ä§Ú§á§Ñ. §£ §Ù§Ñ§Õ§Ñ§ß§Ú§Ú: 3, §Õ§à§á§à§Ý§ß§Ú§ä§Ö§Ý§î§ß§í§Ö: 8 ///////////////////////////////////////////////////////////
 
 #if 1
@@ -218,6 +219,7 @@ void main()
 	cout << " > Constraints type 2 have been applied.\n"
 		<< "Number of nodes : " << bdd_nodecount(t_bdd) << "\n"
 		<< "Number of solution(s): " << std::fixed << std::setprecision(0) << (double)bdd_satcount(t_bdd) << "\n\n";
+
 
 
 
@@ -309,7 +311,7 @@ void main()
 		for (unsigned j = 0; j < SqrtN -1; j++)
 		{
 			tmp_bdd_3_13 |= (			p_name[		grid[i][j]					][NAME_F]
-										AND p_name[		grid[i - 1][j + 1]		][NAME_I]);
+											AND p_name[		grid[i - 1][j + 1]		][NAME_I]);
 			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i - 1 << ", " << j + 1<< ">  " << endl;
 		}
 	}
@@ -378,6 +380,7 @@ void main()
 	cout << " > Constraints type 3 have been applied.\n"
 		<< "Number of nodes : " << bdd_nodecount(t_bdd) << "\n"
 		<< "Number of solution(s): " << std::fixed << std::setprecision(0) << (double)bdd_satcount(t_bdd) << "\n\n";
+
 
 
 
@@ -451,7 +454,7 @@ void main()
 		{
 			tmp_bdd_4_2_2		|= (				p_phone[		grid[i][j]					][PHONE_VIVO]
 													AND p_food[		grid[i - 1][j + 1]		][FOOD_CABBAGE]);
-			cout << "F: <" << i << ", " << j << ">  " << "I: <" << i - 1 << ", " << j + 1<< ">  " << endl;
+			//cout << "F: <" << i << ", " << j << ">  " << "I: <" << i - 1 << ", " << j + 1<< ">  " << endl;
 		}
 	}
 	// ¡¾ÏòÏÂ½ººÏ ¡ý ¡¿§³§Ü§Ý§Ö§Û§Ü§Ñ §Ó §ß§Ú§Ù
@@ -634,6 +637,7 @@ void print(void)
 		cout << endl;
 	}
 	out << endl;
+	cout <<  endl;
 }
 
 void build(char* varset, unsigned n, unsigned I)
